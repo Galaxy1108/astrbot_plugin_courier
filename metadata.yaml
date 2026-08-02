@@ -1,0 +1,5 @@
+name: astrbot_plugin_courier
+desc: 注册 LLM 工具，让机器人可以向同一个机器人接入的不同会话投递主动消息
+version: 0.1.0
+author: int_256t
+repo: https://github.com/Galaxy1108/astrbot_plugin_courier

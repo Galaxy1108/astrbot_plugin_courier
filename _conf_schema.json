@@ -1,0 +1,7 @@
+{
+  "require_admin": {
+    "description": "跨会话投递消息、重命名会话是否仅限管理员",
+    "type": "bool",
+    "default": true
+  }
+}
