@@ -1,14 +1,7 @@
 name: astrbot_plugin_courier
 display_name: Courier · 快递员
 short_desc: 注册 LLM 工具，向同一机器人的不同会话投递主动消息
-desc: |
-  注册一组 LLM 工具，让机器人可以向**同一个机器人接入的不同会话**投递主动消息。
-
-  - `courier_list_sessions`：列出当前机器人已见过的全部会话（群聊/私聊），带序号、名称/别名、最后活跃时间
-  - `courier_send_message`：向目标会话投递主动消息，目标可用序号、群名、昵称、群号、用户 ID 或别名指定
-  - `/courier_rename <目标> [别名]`：给会话设置/清除别名
-
-  自动记录会话与友好命名，重启不丢；不同机器人接入互相隔离，不会投递到其他机器人的会话；跨会话投递默认仅限管理员。
+desc: 注册 LLM 工具，让机器人可以向同一个机器人接入的不同会话投递主动消息。自动记录会话并支持友好命名，不同机器人接入互相隔离，跨会话投递默认仅限管理员。
 version: 0.1.1
 author: Galaxy1108
 repo: https://github.com/Galaxy1108/astrbot_plugin_courier
