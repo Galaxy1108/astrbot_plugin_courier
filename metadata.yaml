@@ -9,7 +9,7 @@ desc: |
   - `/courier_rename <目标> [别名]`：给会话设置/清除别名
 
   自动记录会话与友好命名，重启不丢；不同机器人接入互相隔离，不会投递到其他机器人的会话；跨会话投递默认仅限管理员。
-version: 0.1.0
+version: 0.1.1
 author: Galaxy1108
 repo: https://github.com/Galaxy1108/astrbot_plugin_courier
 astrbot_version: ">=4.16"
