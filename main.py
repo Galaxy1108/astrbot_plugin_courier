@@ -312,57 +312,6 @@ class SendMessageTool(FunctionTool[AstrAgentContext]):
             return f"error: 投递失败: {exc}"
 
 
-@dataclass
-class RenameSessionTool(FunctionTool[AstrAgentContext]):
-    name: str = "courier_rename_session"
-    description: str = (
-        "给某个会话设置或清除别名（仅管理员）。设置后 courier_list_sessions 将优先显示别名，"
-        "方便后续用别名指代该会话。alias 传空字符串表示清除别名。"
-    )
-    parameters: dict = Field(
-        default_factory=lambda: {
-            "type": "object",
-            "properties": {
-                "target": {
-                    "type": "string",
-                    "description": "目标会话：序号、群名、用户昵称、群号、用户ID 或别名。",
-                },
-                "alias": {
-                    "type": "string",
-                    "description": "新别名；传空字符串清除别名。",
-                },
-            },
-            "required": ["target", "alias"],
-        }
-    )
-    table: Any = None
-    config: Any = None
-
-    async def call(
-        self, context: ContextWrapper[AstrAgentContext], **kwargs
-    ) -> ToolExecResult:
-        try:
-            event = context.context.event
-            if perm := _check_admin(self.config, context, "重命名会话"):
-                return perm
-            target = str(kwargs.get("target", "") or "").strip()
-            alias = str(kwargs.get("alias", "") or "").strip()
-            if not target:
-                return "error: target 不能为空。"
-            _, entry, err = self.table.resolve_target(event, target)
-            if entry is None:
-                return err
-            old_name = self.table.display_name(entry)
-            entry["alias"] = alias or None
-            await self.table.save()
-            if alias:
-                return f"已将 {old_name} 的别名设为「{alias}」。"
-            return f"已清除 {old_name} 的别名。"
-        except Exception as exc:  # noqa: BLE001
-            logger.error(f"courier_rename_session error: {exc}")
-            return f"error: 重命名失败: {exc}"
-
-
 class CourierPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig | None = None):
         super().__init__(context)
@@ -371,7 +320,6 @@ class CourierPlugin(Star):
         self.context.add_llm_tools(
             ListSessionsTool(table=self.table),
             SendMessageTool(table=self.table, config=self.config),
-            RenameSessionTool(table=self.table, config=self.config),
         )
 
     async def initialize(self) -> None:
@@ -380,6 +328,42 @@ class CourierPlugin(Star):
             "Courier plugin initialized, sessions loaded: %d",
             len(self.table._sessions),
         )
+
+    @filter.command("courier_rename")
+    async def courier_rename(self, event: AstrMessageEvent):
+        """给会话设置/清除别名。用法：/courier_rename <目标> [别名]（不填别名=清除别名）"""
+        try:
+            if self.config.get("require_admin", True) and event.role != "admin":
+                yield event.plain_result("error: 权限不足，重命名会话仅限管理员使用。")
+                return
+            text = event.message_str.strip()
+            for prefix in ("/courier_rename", "courier_rename"):
+                if text.startswith(prefix):
+                    text = text[len(prefix) :].strip()
+                    break
+            parts = text.split(maxsplit=1)
+            target = parts[0] if parts else ""
+            alias = parts[1].strip() if len(parts) > 1 else ""
+            if not target:
+                yield event.plain_result(
+                    "用法：/courier_rename <目标> [别名]，"
+                    "目标=序号/群名/昵称/群号/用户ID；不填别名则清除该会话的别名。"
+                )
+                return
+            _, entry, err = self.table.resolve_target(event, target)
+            if entry is None:
+                yield event.plain_result(err)
+                return
+            old_name = self.table.display_name(entry)
+            entry["alias"] = alias or None
+            await self.table.save()
+            if alias:
+                yield event.plain_result(f"已将 {old_name} 的别名设为「{alias}」。")
+            else:
+                yield event.plain_result(f"已清除 {old_name} 的别名。")
+        except Exception as exc:  # noqa: BLE001
+            logger.error(f"courier_rename error: {exc}")
+            yield event.plain_result(f"error: 重命名失败: {exc}")
 
     @filter.event_message_type(filter.EventMessageType.ALL)
     async def on_message(self, event: AstrMessageEvent):
