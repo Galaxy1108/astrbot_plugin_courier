@@ -104,7 +104,7 @@ UMO 字符串（`aiocqhttp:group_message:123456`）对 LLM 不可读，**不要�
 
 ## 调试与开发
 
-- AstrBot 运行时注入插件：把本插件 clone/放到 `/home/int_256t/Documents/Projects/AstrBot/data/plugins/`，用 `uv run main.py` 启动本体（API 默认 http://localhost:6185）。
-- 改代码后在 WebUI 插件管理 → 插件 → `...` → `重载插件` 热重载。
+- **部署（当前实际工作流）**：插件已发布到 GitHub（`Galaxy1108/astrbot_plugin_courier`），用户机器走 WebUI 插件管理 → 安装插件 → 填仓库地址安装；改代码 push 后在用户机器上"更新插件"拉取最新版。注意：**不要往 AstrBot 源码仓库（`/home/int_256t/Documents/Projects/AstrBot`）里写东西**，它是纯源码仓库。
+- **本地调试（官方方式，仅当需要）**：把插件 clone/放到 `AstrBot/data/plugins/`，用 `uv run main.py` 启动本体（API 默认 http://localhost:6185）；改代码后在 WebUI 插件管理 → 插件 → `...` → `重载插件` 热重载。
 - 代码规范（来自 AstrBot 插件开发原则）：提交前 `ruff format`；持久化数据放 AstrBot `data/` 目录而非插件目录；日志用 `from astrbot.api import logger`（或 `self.logger`）；网络请求用 aiohttp/httpx，**禁止 `requests`**。
 - 本机代理：`http://127.0.0.1:7897`（需要联网拉取依赖/插件市场/测试外部 API 时使用）。
