@@ -12,7 +12,7 @@ desc: |
 version: 0.1.0
 author: Galaxy1108
 repo: https://github.com/Galaxy1108/astrbot_plugin_courier
-astrbot_version: ">=4.16,<5"
+astrbot_version: ">=4.16"
 social_link: https://github.com/Galaxy1108
 tags:
   - 消息投递
