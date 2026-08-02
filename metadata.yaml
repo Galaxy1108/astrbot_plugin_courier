@@ -1,5 +1,5 @@
 name: astrbot_plugin_courier
-display_name: Courier · 快递员
+display_name: Courier · 消息传递
 short_desc: 注册 LLM 工具，向同一机器人的不同会话投递主动消息
 desc: 注册 LLM 工具，让机器人可以向同一个机器人接入的不同会话投递主动消息。自动记录会话并支持友好命名，不同机器人接入互相隔离，跨会话投递默认仅限管理员。
 version: 0.1.1
