@@ -1,4 +1,4 @@
-# Courier · 快递员
+# Courier · 消息传递
 
 > [!IMPORTANT]
 > 本项目代码完全由 AI 生成
