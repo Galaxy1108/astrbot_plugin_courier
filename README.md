@@ -1,5 +1,11 @@
 # Courier · 消息传递
 
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![AstrBot](https://img.shields.io/badge/AstrBot-%3E%3D4.16-blue)
+![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue)
+![Version](https://img.shields.io/github/v/tag/Galaxy1108/astrbot_plugin_courier)
+![GitHub stars](https://img.shields.io/github/stars/Galaxy1108/astrbot_plugin_courier)
+
 > [!IMPORTANT]
 > 本项目代码完全由 AI 生成
 
